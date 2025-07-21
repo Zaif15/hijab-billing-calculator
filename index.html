@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haya and Grace Billing Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffaf4;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      color: #8B4513;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .calculator {
+      max-width: 500px;
+      margin: auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      background-color: #d2b48c;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #c19a6b;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f8f0e3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Haya and Grace Billing Calculator</h1>
+  <div class="calculator">
+    <label for="product">Select Product</label>
+    <input list="productList" id="product" name="product" placeholder="Type or select a product" />
+    <datalist id="productList"></datalist>
+
+    <label for="quantity">Quantity</label>
+    <input type="number" id="quantity" name="quantity" min="1" placeholder="Enter quantity" />
+
+    <button onclick="addToBill()">Add to Bill</button>
+
+    <table id="billTable">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3 style="text-align:right; padding:10px">Grand Total: ₹<span id="grandTotal">0</span></h3>
+  </div>
+
+  <script>
+    const products = {
+      "Georgette Hijab": 169,
+      "Satin Hijab": 249,
+      "Shimmer Georgette Hijab": 229,
+      "Modal Hijab": 219,
+      "Soft Organza Hijab": 239,
+      "Premium Modal Hijab": 229,
+      "Viscose Hijab": 209,
+      "Round Magnetic Pin": 70,
+      "Heart Magnetic Pin": 25,
+      "Hijab Cap": 60
+    };
+
+    const productList = document.getElementById("productList");
+    const productInput = document.getElementById("product");
+    const quantityInput = document.getElementById("quantity");
+    const billTable = document.getElementById("billTable").querySelector("tbody");
+    const grandTotalSpan = document.getElementById("grandTotal");
+    let grandTotal = 0;
+
+    for (const key in products) {
+      const option = document.createElement("option");
+      option.value = key;
+      productList.appendChild(option);
+    }
+
+    function addToBill() {
+      const product = productInput.value.trim();
+      const quantity = parseInt(quantityInput.value);
+
+      if (!products[product] || isNaN(quantity) || quantity <= 0) {
+        alert("Please select a valid product and quantity.");
+        return;
+      }
+
+      const unitPrice = products[product];
+      const total = unitPrice * quantity;
+      grandTotal += total;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${product}</td>
+        <td>₹${unitPrice}</td>
+        <td>${quantity}</td>
+        <td>₹${total}</td>
+      `;
+      billTable.appendChild(row);
+
+      grandTotalSpan.textContent = grandTotal;
+      productInput.value = "";
+      quantityInput.value = "";
+    }
+  </script>
+</body>
+</html>
